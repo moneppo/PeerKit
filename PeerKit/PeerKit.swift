@@ -62,8 +62,8 @@ func didDisconnect(myPeerID: MCPeerID, peer: MCPeerID) {
 }
 
 func didReceiveData(data: NSData, fromPeer peer: MCPeerID) {
-    let dict = NSKeyedUnarchiver.unarchiveObjectWithData(data) as [String: AnyObject]
-    let event = dict["event"] as String
+    let dict = NSKeyedUnarchiver.unarchiveObjectWithData(data) as! [String: AnyObject]
+    let event = dict["event"] as! String
     let object: AnyObject? = dict["object"]
     dispatch_async(dispatch_get_main_queue()) {
         if let onEvent = onEvent {
@@ -104,7 +104,7 @@ public func stopTransceiving() {
 
 // MARK: Events
 
-public func sendEvent(event: String, object: AnyObject? = nil, toPeers peers: [MCPeerID]? = session?.connectedPeers as [MCPeerID]?) {
+public func sendEvent(event: String, object: AnyObject? = nil, toPeers peers: [MCPeerID]? = session?.connectedPeers as! [MCPeerID]?) {
     if peers == nil {
         return
     }
@@ -118,7 +118,7 @@ public func sendEvent(event: String, object: AnyObject? = nil, toPeers peers: [M
 
 public func sendResourceAtURL(resourceURL: NSURL!,
                    withName resourceName: String!,
-  toPeers peers: [MCPeerID]? = session?.connectedPeers as [MCPeerID]?,
+  toPeers peers: [MCPeerID]? = session?.connectedPeers as! [MCPeerID]?,
   withCompletionHandler completionHandler: ((NSError!) -> Void)!) -> [NSProgress]! {
 
     if let peers = peers {

@@ -16,12 +16,14 @@ enum TransceiverMode {
 public class Transceiver: SessionDelegate {
 
     var transceiverMode = TransceiverMode.Both
-    let session: Session
-    let advertiser: Advertiser
-    let browser: Browser
+    var session: Session
+    var advertiser: Advertiser
+    var browser: Browser
+    let displayName: String
 
     public init(displayName: String!) {
-        session = Session(displayName: displayName, delegate: nil)
+        self.displayName = displayName
+        session = Session(displayName: self.displayName, delegate: nil)
         advertiser = Advertiser(mcSession: session.mcSession)
         browser = Browser(mcSession: session.mcSession)
         session.delegate = self
@@ -38,6 +40,13 @@ public class Transceiver: SessionDelegate {
         advertiser.stopAdvertising()
         browser.stopBrowsing()
         session.disconnect()
+        
+        
+        // Reset, like, everything
+        self.session = Session(displayName: self.displayName, delegate: nil)
+        self.advertiser = Advertiser(mcSession: session.mcSession)
+        self.browser = Browser(mcSession: session.mcSession)
+        self.session.delegate = self
     }
 
     func startAdvertising(#serviceType: String, discoveryInfo: [String: String]? = nil) {

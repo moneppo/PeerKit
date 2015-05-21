@@ -41,10 +41,13 @@ public class Session: NSObject, MCSessionDelegate {
     public func session(session: MCSession!, peer peerID: MCPeerID!, didChangeState state: MCSessionState) {
         switch state {
             case .Connecting:
+                println("Connecting: " + peerID.description)
                 delegate?.connecting(myPeerID, toPeer: peerID)
             case .Connected:
+                println("Connected: " + peerID.description)
                 delegate?.connected(myPeerID, toPeer: peerID)
             case .NotConnected:
+                println("Not Connected: " + peerID.description)
                 delegate?.disconnected(myPeerID, fromPeer: peerID)
         }
     }
@@ -58,12 +61,15 @@ public class Session: NSObject, MCSessionDelegate {
     }
 
     public func session(session: MCSession!, didStartReceivingResourceWithName resourceName: String!, fromPeer peerID: MCPeerID!, withProgress progress: NSProgress!) {
+        println("Starting to receive resource...")
         // unused
     }
 
     public func session(session: MCSession!, didFinishReceivingResourceWithName resourceName: String!, fromPeer peerID: MCPeerID!, atURL localURL: NSURL!, withError error: NSError!) {
         if (error == nil) {
             delegate?.finishReceivingResource(myPeerID, resourceName: resourceName, fromPeer: peerID, atURL: localURL)
+        } else {
+            println(error)
         }
     }
 }
